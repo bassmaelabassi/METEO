@@ -1,0 +1,39 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <script src="main.js" defer></script>
+    <title>My Weather App</title>
+  </head>
+  <body>
+    <div class="App">
+      <div id="app_container">
+        <main>
+          <div class="search-container">
+            <input
+              type="text"
+              placeholder="Search..."
+              class="search-bar"
+              id="location_input"
+            />
+          </div>
+
+          <div>
+            <div class="location-container">
+              <div class="location" id="location"></div>
+              <div class="date" id="date"></div>
+            </div>
+            <div class="weather-container">
+              <div class="temperature" id="temperature_current"></div>
+              <div class="temperature" id="temperature_max_min"></div>
+              <div class="weather" id="weather"></div>
+              <div class="weather-desc" id="weather_desc"></div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
