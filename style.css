@@ -1,0 +1,30 @@
+body{
+    background-image: url(pexels-no-name-14543-66997.jpg) ;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.d-flex{
+    display: flex;
+    justify-content: end ;
+    padding-left: 70%;
+}
+
+.items{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 20px;
+}
+.details{
+    height: 200px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    align-items: center;
+}
+.forecast-timeline{
+    display: flex;
+    justify-content: space-around;
+
+}
