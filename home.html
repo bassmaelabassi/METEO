@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title>WeatherConnect</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <img src="amcharts_weather_icons_1.0.0/animated/cloudy-day-2.svg" alt="Weather Icon">
+                <a class="navbar-brand" href="#">WeatherConnect</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" id="city-search" name="city" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="button">Search</button>
+                    </form>                
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="items">
+        <div class="card" style="width: 50rem;height: 20rem;">
+            <div class="card-body">
+                <h2 class="cityname">Beni Mellal</h2>
+                <div class="temperature">Temperature:
+                    <span class="temp-value">+11°</span>
+                </div>
+                <div class="details">
+                    <div><span>Wind speed: </span> <span class="windS">0.62 m/c</span></div>
+                    <div><span>Wind Deg: </span> <span class="windD">1.2 m/c</span></div>
+                    <div><span>Humidity: </span> <span class="hum">32%</span></div>
+                    <div><span>Precipitation rate: </span> <span>32%</span></div>
+                    <div><span>Cloudiness: </span> <span>32%</span></div>
+                    <div><span>Visibility: </span> <span class="vis">10000 m</span></div>
+                    <div><span>Pressure: </span> <span class="pre">1015 hPa</span></div>
+                </div>        
+            </div>
+        </div>
+        <div class="card" style="width: 50rem;">
+            <div class="card-body">
+                <h3>Forecast for every 3 hours</h3>
+                <div class="forecast-timeline">
+                    <div class="first">+11° <br class="h1"> 21:00</div>
+                    <div class="second">+11° <br class="h2"> 00:00</div>
+                    <div class="third">+11° <br class="h3"> 03:00</div>
+                    <div class="fourth">+11° <br class="h4"> 06:00</div>
+                    <div class="fifth">+11° <br class="h5"> 09:00</div>
+                    <div class="sixth">+11° <br class="h6"> 12:00</div>
+                    <div class="seventh">+11° <br class="h7"> 21:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apiKey = "92501781fe959a44d22301991297314b";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+        const apiforecast = "https://api.openweathermap.org/data/2.5/forecast";
+        const searchField = document.querySelector('.d-flex input');
+        const searchBtn = document.querySelector('.d-flex button');
+        const weatherCards = document.querySelector('.forecast-timeline');
+
+        function getMostFrequentWeatherCode(hourly, date) {
+            const weatherCodes = hourly.filter(h => h.dt_txt.includes(date)).map(h => h.weather[0].id);
+            const frequencyMap = weatherCodes.reduce((acc, code) => {
+                acc[code] = (acc[code] || 0) + 1;
+                return acc;
+            }, {});
+            return Object.keys(frequencyMap).reduce((a, b) => frequencyMap[a] > frequencyMap[b] ? a : b);
+        }
+
+        function getIcon(weatherCode) {
+            const iconMap = {
+                800: 'amcharts_weather_icons_1.0.0/animated/day.svg',
+                801: 'amcharts_weather_icons_1.0.0/animated/cloudy-day-1.svg',
+                802: 'amcharts_weather_icons_1.0.0/animated/cloudy-day-2.svg',
+                803: 'amcharts_weather_icons_1.0.0/animated/cloudy-day-3.svg',
+                804: 'amcharts_weather_icons_1.0.0/animated/cloudy.svg',
+                500: 'amcharts_weather_icons_1.0.0/animated/rainy-1.svg',
+                501: 'amcharts_weather_icons_1.0.0/animated/rainy-2.svg',
+                502: 'amcharts_weather_icons_1.0.0/animated/rainy-3.svg',
+                503: 'amcharts_weather_icons_1.0.0/animated/rainy-4.svg',
+                504: 'amcharts_weather_icons_1.0.0/animated/rainy-5.svg',
+                511: 'amcharts_weather_icons_1.0.0/animated/rainy-6.svg',
+                520: 'amcharts_weather_icons_1.0.0/animated/rainy-7.svg',
+                521: 'amcharts_weather_icons_1.0.0/animated/rainy-7.svg',
+                522: 'amcharts_weather_icons_1.0.0/animated/rainy-7.svg',
+                531: 'amcharts_weather_icons_1.0.0/animated/rainy-7.svg',
+                600: 'amcharts_weather_icons_1.0.0/animated/snowy-1.svg',
+                601: 'amcharts_weather_icons_1.0.0/animated/snowy-2.svg',
+                602: 'amcharts_weather_icons_1.0.0/animated/snowy-3.svg',
+                611: 'amcharts_weather_icons_1.0.0/animated/snowy-4.svg',
+                612: 'amcharts_weather_icons_1.0.0/animated/snowy-5.svg',
+                613: 'amcharts_weather_icons_1.0.0/animated/snowy-6.svg',
+                615: 'amcharts_weather_icons_1.0.0/animated/snowy-6.svg',
+                616: 'amcharts_weather_icons_1.0.0/animated/snowy-6.svg',
+                620: 'amcharts_weather_icons_1.0.0/animated/snowy-6.svg',
+                621: 'amcharts_weather_icons_1.0.0/animated/snowy-6.svg',
+                622: 'amcharts_weather_icons_1.0.0/animated/snowy-6.svg',
+                701: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                711: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                721: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                731: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                741: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                751: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                761: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                762: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                771: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+                781: 'amcharts_weather_icons_1.0.0/animated/mist.svg',
+            };
+            return iconMap[weatherCode] || iconMap[800];
+        }
+
+        function updateForecast(forecastData) {
+            weatherCards.innerHTML = "";
+            for (let i = 0; i < forecastData.list.length; i += 8) {
+                const card = document.createElement("div");
+                card.classList.add("card", "text-center", "m-1");
+                const date = new Date(forecastData.list[i].dt_txt);
+                const dayName = date.toLocaleDateString("fr-FR", { weekday: "short" });
+                const dayTemp = Math.round(forecastData.list[i].main.temp);
+                const weatherCode = forecastData.list[i].weather[0].id;
+                card.innerHTML = `
+                    <div class="card-body">
+                        <h6 class="card-title">${dayName}</h6>
+                        <img src="${getIcon(weatherCode)}" class="card-img-top" style="max-height: 70px; object-fit: contain;">
+                        <p class="card-text">${dayTemp}°C</p>
+                    </div>
+                `;
+                weatherCards.appendChild(card);
+            }
+        }
+
+        async function check(cityname) {
+            const result = await fetch(apiUrl + cityname + `&appid=${apiKey}`);
+            var data = await result.json();
+            console.log(data)
+            document.querySelector('.cityname').innerHTML = data.name;
+            document.querySelector(".temp-value").innerHTML = Math.round(data.main.temp) + " °C";
+            document.querySelector(".windS").innerHTML = data.wind.speed + " km/h";
+            document.querySelector(".windD").innerHTML = data.wind.deg;
+            document.querySelector(".hum").innerHTML = data.main.humidity + " %";
+            document.querySelector(".vis").innerHTML = data.visibility + " m";
+            document.querySelector(".pre").innerHTML = data.main.pressure + " hPa";
+        }
+
+        async function forecast(cityname) {
+            const forecastResult = await fetch(`${apiforecast}?q=${cityname}&appid=${apiKey}&units=metric`);
+            var forecastData = await forecastResult.json();
+            console.log(forecastData);
+            updateForecast(forecastData);
+        }
+
+        searchBtn.addEventListener('click', () => {
+            check(searchField.value);
+            forecast(searchField.value);
+        });
+    </script>
+</body>
+</html>
