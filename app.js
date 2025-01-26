@@ -4,7 +4,6 @@ const apiforecast = "https://api.openweathermap.org/data/2.5/forecast";
 const searchField = document.querySelector('#city-search');
 const searchBtn = document.querySelector('#search-btn');
 const weatherCards = document.querySelector('.forecast-timeline');
-
 function getIcon(weatherCode) {
     const iconMap = {
         800: 'amcharts_weather_icons_1.0.0/animated/day.svg',
@@ -13,11 +12,9 @@ function getIcon(weatherCode) {
         803: 'amcharts_weather_icons_1.0.0/animated/cloudy-day-3.svg',
         804: 'amcharts_weather_icons_1.0.0/animated/cloudy.svg',
         500: 'amcharts_weather_icons_1.0.0/animated/rainy-1.svg',
-        // ... بقية الأيقونات
     };
     return iconMap[weatherCode] || iconMap[800];
 }
-
 async function check(cityname) {
     try {
         const result = await fetch(apiUrl + cityname + `&appid=${apiKey}`);
@@ -36,7 +33,6 @@ async function check(cityname) {
         alert("Error: " + error.message);
     }
 }
-
 async function forecast(cityname) {
     try {
         const forecastResult = await fetch(`${apiforecast}?q=${cityname}&appid=${apiKey}&units=metric`);
@@ -67,7 +63,6 @@ async function forecast(cityname) {
         alert("Error: " + error.message);
     }
 }
-
 searchBtn.addEventListener('click', () => {
     const cityname = searchField.value;
     if (cityname) {
